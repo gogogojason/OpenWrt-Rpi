@@ -75,7 +75,7 @@ git clone --depth=1 $serverchan_url package/lean/luci-app-serverchan
 #echo 'CONFIG_PACKAGE_luci-app-serverchan=y' >> .config
 
 echo '添加主题argon'
-git clone $theme_argon package/lean/luci-theme-edge
+git clone --depth=1 https://github.com/gogogojason/luci-theme-edge package/lean/luci-theme-edge
 
 echo '添加adguardhome'
 git clone $adguardhome_url package/lean/luci-app-adguardhome
