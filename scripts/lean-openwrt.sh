@@ -50,6 +50,9 @@ sed -i "s/192.168.1.1/$lan_ip/g" package/base-files/files/bin/config_generate
 echo "修改时区"
 sed -i "s/'UTC'/'CST-8'\n   set system.@system[-1].zonename='$utc_name'/g" package/base-files/files/bin/config_generate
 
+echo '添加主题argon'
+git clone --depth=1 https://github.com/gogogojason/luci-theme-edge package/lean/luci-theme-edge
+
 echo "修改默认主题"
 sed -i 's/+luci-theme-bootstrap/+luci-theme-edge/g' feeds/luci/collections/luci/Makefile
 sed -i "s/bootstrap/argon/g" feeds/luci/modules/luci-base/root/etc/config/luci
@@ -62,9 +65,6 @@ sed -i "s/R20.10.20/R20.10.20\/hfy166 Ver.$ver_name/g" package/lean/default-sett
 echo '添加serverchan'
 git clone --depth=1 $serverchan_url package/lean/luci-app-serverchan
 #echo 'CONFIG_PACKAGE_luci-app-serverchan=y' >> .config
-
-echo '添加主题argon'
-git clone --depth=1 https://github.com/gogogojason/luci-theme-edge package/lean/luci-theme-edge
 
 echo '添加adguardhome'
 git clone $adguardhome_url package/lean/luci-app-adguardhome
