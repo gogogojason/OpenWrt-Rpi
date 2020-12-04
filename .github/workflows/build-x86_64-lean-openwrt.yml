@@ -175,20 +175,6 @@ jobs:
         cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
         gzip *.img
 
-    - name: Upload Bin Folder
-      uses: actions/upload-artifact@main
-      if: steps.generate.outputs.GENERATE_STATUS == 'success'
-      with:
-        name: bin-archive
-        path: openwrt/bin
-        
-    - name: Upload DL Folder
-      uses: actions/upload-artifact@main
-      if: steps.generate.outputs.GENERATE_STATUS == 'success'
-      with:
-        name: dl-archive
-        path: openwrt/dl
-
   Upload:
     needs: [Build]
     runs-on: ubuntu-18.04
@@ -234,26 +220,6 @@ jobs:
           mv server packages-server
           zip -qrm packages-server.zip packages-server
           mv packages-server.zip $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
-
-      - name: Configure Rclone
-        env:
-          RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
-        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true'
-        run: |
-          cd $OPENWRTROOT
-          curl https://rclone.org/install.sh | sudo bash
-          mkdir -p ~/.config/rclone/
-          cat << EOF > ~/.config/rclone/rclone.conf
-          $RCLONE_CONFIG
-          EOF
-
-      - name: Upload Targets File To Rclone
-        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true'
-        run: |
-          cd $OPENWRTROOT
-          rclone copy bin ${{ secrets.RCLONE_REMOTE }}:$(date +"%Y-%m-%d")/lean
-          rclone copy dl-archive.zip ${{ secrets.RCLONE_REMOTE }}:$(date +"%Y-%m-%d")/lean/targets/$TARGET/$SUBTARGET
-          echo "::warning file=Firmware-GoogleDrive::Download Link: https://drive.google.com/drive/folders/1SkNpJkhmG8veheL3ADVFoVTkvfhWjW0P"
 
       - name: Organize Files
         id: organize
