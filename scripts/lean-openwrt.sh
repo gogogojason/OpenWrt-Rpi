@@ -74,33 +74,8 @@ echo '添加serverchan'
 git clone --depth=1 $serverchan_url package/lean/luci-app-serverchan
 #echo 'CONFIG_PACKAGE_luci-app-serverchan=y' >> .config
 
-#echo '添加主题argon'
-#git clone $theme_argon package/lean/luci-theme-argonblue
-#echo 'CONFIG_PACKAGE_luci-theme-argon-mc=y' >> .config
-
-#echo '添加luci-app-smartdns'
-#git clone -b lede $smartdnsapp_url package/lean/luci-app-smartdns
-#echo 'CONFIG_PACKAGE_luci-app-smartdns=y' >> .config
-
-#echo '添加smartdns'
-#git clone $smartdns_url feeds/packages/net/smartdns/
-#echo 'CONFIG_PACKAGE_smartdns=y' >> .config
-
-#echo '添加openclash'
-#git clone $openClash_url package/lean/luci-app-openclash
-#echo 'CONFIG_PACKAGE_luci-app-openclash=y' >> .config
-#echo 'CONFIG_PACKAGE_luci-i18n-openclash-zh-cn=y'  >> .config
-
-#echo '添加Passwall'
-#git clone $passwall_url package/passwall
-#echo 'CONFIG_PACKAGE_luci-app-passwall=y' >> .config
-#echo 'CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Shadowsocks=y' >> .config
-#echo 'CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Trojan=y' >> .config
-#echo 'CONFIG_PACKAGE_luci-app-passwall_INCLUDE_simple-obfs=y' >> .config
-#echo 'CONFIG_PACKAGE_luci-app-passwall_INCLUDE_v2ray-plugin=y' >> .config
-#echo 'CONFIG_PACKAGE_luci-app-passwall_INCLUDE_Brook=y' >> .config
-#echo 'CONFIG_PACKAGE_luci-app-passwall_INCLUDE_kcptun=y' >> .config
-#echo 'CONFIG_PACKAGE_luci-i18n-passwall-zh-cn=y'  >> .config
+echo '添加主题argon'
+git clone $theme_argon package/lean/luci-theme-edge
 
 echo '添加adguardhome'
 git clone $adguardhome_url package/lean/luci-app-adguardhome
