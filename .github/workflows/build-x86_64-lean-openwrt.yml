@@ -8,14 +8,18 @@
 
 name: Build x86_64 Lean's OpenWrt
 
-on:
-  repository_dispatch:
-    types: [lean, x86_64]
+on: 
+  # push: 
+  #   branches:
+  #     - master
+  # schedule:
+  #   - cron: 30 13 * * 6
   workflow_dispatch:
-  schedule:
-    - cron: 0 18 * * *
-#  watch:
-#    types: started
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: true
+        default: 'true'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -86,6 +90,10 @@ jobs:
         ../$DIY_SH
         ../scripts/preset-clash-core.sh amd64
         ../scripts/preset-terminal-tools.sh
+  
+    - name: SSH connection to Actions
+      uses: garypang13/debugger-action@master
+      if: github.event.inputs.ssh == 'true'
 
     - name: Download Package
       id: package
