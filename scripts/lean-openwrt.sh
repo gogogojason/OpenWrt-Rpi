@@ -47,13 +47,6 @@ sed -i "s/OpenWrt_5G/$wifi_name5g/g" package/lean/mt/drivers/mt_wifi/files/mt761
 echo "设置lan ip"
 sed -i "s/192.168.1.1/$lan_ip/g" package/base-files/files/bin/config_generate
 
-#echo "修改argon主题背景色"
-#sed -i "s/#5e72e4/#00C000/g" feeds/otherpackges/luci-theme-argon_new/luasrc/view/themes/argon/header.htm
-
-echo '添加主题argon'
-git clone $theme_argon package/lean/luci-theme-edge
-#echo 'CONFIG_PACKAGE_luci-theme-argon-mc=y' >> .config
-
 echo "修改时区"
 sed -i "s/'UTC'/'CST-8'\n   set system.@system[-1].zonename='$utc_name'/g" package/base-files/files/bin/config_generate
 
@@ -65,10 +58,6 @@ sed -i '/set luci.main.mediaurlbase=\/luci-static\/bootstrap/d' feeds/luci/theme
 
 echo "修改版本信息"
 sed -i "s/R20.10.20/R20.10.20\/hfy166 Ver.$ver_name/g" package/lean/default-settings/files/zzz-default-settings
-
-#echo '添加在线升级'
-#git clone $upgrade_url package/lean/luci-app-gpsysupgrade
-#echo 'CONFIG_PACKAGE_luci-app-gpsysupgrade=y' >> .config
 
 echo '添加serverchan'
 git clone --depth=1 $serverchan_url package/lean/luci-app-serverchan
