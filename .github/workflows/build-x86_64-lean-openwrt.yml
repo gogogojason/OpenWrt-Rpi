@@ -28,8 +28,7 @@ env:
   DIY_SH: scripts/lean-openwrt.sh
   IPV6MOD_IN_FIRMWARE: true
   KMODS_IN_FIRMWARE: true
-  UPLOAD_DL: true
-  UPLOAD_RCLONE: true
+  UPLOAD_RCLONE: false
   UPLOAD_WETRANSFER: true
   UPLOAD_COWTRANSFER: true
   TZ: Asia/Shanghai
@@ -174,6 +173,13 @@ jobs:
       run: |
         cd $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
         gzip *.img
+        
+    - name: Upload Bin Folder
+      uses: actions/upload-artifact@main
+      if: steps.generate.outputs.GENERATE_STATUS == 'success'
+      with:
+        name: bin-archive
+        path: openwrt/bin  
 
   Upload:
     needs: [Build]
@@ -220,6 +226,24 @@ jobs:
           mv server packages-server
           zip -qrm packages-server.zip packages-server
           mv packages-server.zip $OPENWRTROOT/bin/targets/$TARGET/$SUBTARGET
+
+      - name: Configure Rclone
+        env:
+          RCLONE_CONFIG: ${{ secrets.RCLONE_CONFIG }}
+        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true'
+        run: |
+          cd $OPENWRTROOT
+          curl https://rclone.org/install.sh | sudo bash
+          mkdir -p ~/.config/rclone/
+          cat << EOF > ~/.config/rclone/rclone.conf
+          $RCLONE_CONFIG
+          EOF
+      - name: Upload Targets File To Rclone
+        if: env.GENERATE_STATUS == 'success' && env.UPLOAD_RCLONE == 'true'
+        run: |
+          cd $OPENWRTROOT
+          rclone copy bin ${{ secrets.RCLONE_REMOTE }}:$(date +"%Y-%m-%d")/lean
+          echo "::warning file=Firmware-GoogleDrive::Download Link: https://drive.google.com/drive/folders/1SkNpJkhmG8veheL3ADVFoVTkvfhWjW0P"
 
       - name: Organize Files
         id: organize
